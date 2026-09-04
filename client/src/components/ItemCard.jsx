@@ -1,4 +1,26 @@
-﻿import React from 'react';
+import React from 'react';
+import headphoneImg from '../assets/headphone.avif';
+import watchImg from '../assets/watch.avif';
+import bottleImg from '../assets/bottle.avif';
+import keyboardImg from '../assets/keyboard.avif';
+import bagImg from '../assets/bag.avif';
+import chairImg from '../assets/chair.jfif';
+import choclateImg from '../assets/choclate.webp';
+
+// Map item codes to their images.
+const itemImages = {
+  'NC-300': headphoneImg,
+  'FITBAND 4': watchImg,
+  'FITBAND-4': watchImg,
+  HYDRO750: bottleImg,
+  'HYDRO-750': bottleImg,
+  'MK-87': keyboardImg,
+  PACK25: bagImg,
+  'PACK-25': bagImg,
+  ERGOPRO: chairImg,
+  'ERGO-PRO': chairImg,
+  'Valentine': choclateImg,
+};
 
 /**
  * Product item card component for the catalog view
@@ -9,12 +31,14 @@
  * @returns {React.ReactElement}
  */
 export default function ItemCard({ item, onGiveFeedback, onViewDetails }) {
+  const image = itemImages[item.code] || headphoneImg;
+
   return (
     <div className="product-card">
       {/* Thumbnail Banner with badges */}
       <div className="product-card-image-container">
         <img
-          src={item.image || 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=500&auto=format&fit=crop&q=80'}
+          src={image}
           alt={item.name}
           className="product-card-image"
           loading="lazy"

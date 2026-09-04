@@ -7,16 +7,9 @@ import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminAddItemPage from './pages/AdminAddItemPage';
 import FeedbackService from './services/FeedbackService';
 
-/**
- * Root Application Component
- * Manages customer portal and administrative workspace views
- * @returns {React.ReactElement}
- */
-export default function App() {
-  // Navigation view: 'customer-catalog' | 'customer-form' | 'admin-dashboard' | 'admin-add-item'
-  const [currentView, setCurrentView] = useState('customer-catalog');
 
-  // Active item selected for feedback
+export default function App() {
+  const [currentView, setCurrentView] = useState('customer-catalog');
   const [selectedItem, setSelectedItem] = useState(null);
 
   // Catalog items list
