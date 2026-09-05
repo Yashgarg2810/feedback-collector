@@ -6,6 +6,7 @@ import keyboardImg from '../assets/keyboard.avif';
 import bagImg from '../assets/bag.avif';
 import chairImg from '../assets/chair.jfif';
 import choclateImg from '../assets/choclate.webp';
+import mouseImg from '../assets/mouse.jpg';
 
 // Map code to local image imported from assets
 const imageMap = {
@@ -18,15 +19,18 @@ const imageMap = {
   'PACK25': bagImg,
   'PACK-25': bagImg,
   'ERGOPRO': chairImg,
-  'Valentine': choclateImg
+  'VALENTINE': choclateImg,
+  'WM-10': mouseImg,
+  'WM-100': mouseImg,
 };
 
 /**
  * Reusable product card component
  */
 export default function ItemCard({ item, onGiveFeedback }) {
-  // Use mapped local asset or fallback to headphone
-  const cardImage = imageMap[item.code] || headphoneImg;
+  const normalizedCode = item.code?.trim().toUpperCase();
+  const isMouse = item.name?.toLowerCase().includes('mouse');
+  const cardImage = imageMap[normalizedCode] || (isMouse ? mouseImg : headphoneImg);
 
   return (
     <div className="item-card">
@@ -53,7 +57,7 @@ export default function ItemCard({ item, onGiveFeedback }) {
           className="btn btn-primary btn-feedback"
           onClick={() => onGiveFeedback(item)}
         >
-          Give Feedback ✍️
+          Give Feedback
         </button>
       </div>
     </div>

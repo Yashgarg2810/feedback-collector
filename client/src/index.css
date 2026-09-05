@@ -1,9 +1,4 @@
-﻿/* ==========================================================
-   FeedbackHub - Simple CSS Stylesheet
-   Built with standard, readable CSS (No complex variables)
-   ========================================================== */
-
-* {
+﻿* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -672,9 +667,7 @@ body {
   color: #64748b;
 }
 
-/* ==========================================================
-   Confirmation Modal
-   ========================================================== */
+/* Confirmation Modal */
 .modal-backdrop {
   position: fixed;
   inset: 0;
