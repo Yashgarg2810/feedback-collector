@@ -1,13 +1,15 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 
-// connects to mongodb, called once when server starts
+// Connects to MongoDB with a 5-second timeout so server never hangs
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log('MongoDB connected');
+    await mongoose.connect(process.env.MONGO_URI, {
+      serverSelectionTimeoutMS: 5000
+    });
+    console.log('MongoDB connected successfully');
   } catch (error) {
-    console.log('MongoDB connection error:', error.message);
-    process.exit(1); 
+    console.log('MongoDB Atlas connection error:', error.message);
+    console.log('Note: Please ensure your current IP address is whitelisted in MongoDB Atlas Network Access (0.0.0.0/0).');
   }
 };
 
