@@ -5,43 +5,33 @@ import CustomerCatalogPage from './pages/CustomerCatalogPage';
 import FeedbackFormPage from './pages/FeedbackFormPage';
 import AdminDashboardPage from './pages/AdminDashboardPage';
 import AdminAddItemPage from './pages/AdminAddItemPage';
-import FeedbackService from './services/FeedbackService';
+import { getItems } from './services/FeedbackService';
 
-
+/**
+ * Main App Component
+ * Handles page navigation and global items state
+ */
 export default function App() {
-  const [currentView, setCurrentView] = useState('customer-catalog');
+  // Current view state: 'catalog' | 'feedback' | 'admin' | 'add-item'
+  const [currentView, setCurrentView] = useState('catalog');
+
+  // Currently selected item for feedback
   const [selectedItem, setSelectedItem] = useState(null);
 
   // Catalog items list
   const [items, setItems] = useState([]);
-  const [itemsLoading, setItemsLoading] = useState(true);
+  const [loadingItems, setLoadingItems] = useState(false);
 
-  // Toast notification state
-  const [toastMessage, setToastMessage] = useState('');
-
-  /**
-   * Displays a temporary notification toast
-   * @param {string} msg - Message to display
-   */
-  const showToast = (msg) => {
-    setToastMessage(msg);
-    setTimeout(() => {
-      setToastMessage('');
-    }, 4000);
-  };
-
-  /**
-   * Fetches product items from the server
-   */
+  // Fetch catalog items from backend
   const loadItems = useCallback(async () => {
     try {
-      setItemsLoading(true);
-      const data = await FeedbackService.getItems();
+      setLoadingItems(true);
+      const data = await getItems();
       setItems(data);
     } catch (err) {
-      console.error('Failed to load items:', err);
+      console.log('Using local catalog items:', err.message);
     } finally {
-      setItemsLoading(false);
+      setLoadingItems(false);
     }
   }, []);
 
@@ -49,124 +39,95 @@ export default function App() {
     loadItems();
   }, [loadItems]);
 
-  /**
-   * Initiates feedback for a specific product card
-   * @param {Object} item - Catalog item
-   */
+  // Give feedback on a specific product card
   const handleSelectFeedbackItem = (item) => {
     setSelectedItem(item);
-    setCurrentView('customer-form');
+    setCurrentView('feedback');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /**
-   * Initiates general feedback without a pre-selected item
-   */
+  // Give general feedback (no specific product)
   const handleGeneralFeedback = () => {
     setSelectedItem(null);
-    setCurrentView('customer-form');
+    setCurrentView('feedback');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /**
-   * Triggered when feedback has been submitted
-   */
+  // Callback when feedback is submitted
   const handleFeedbackSubmitted = () => {
-    showToast('Feedback submitted successfully! Thank you.');
     loadItems();
   };
 
-  /**
-   * Triggered when an admin creates a new catalog item
-   */
+  // Callback when new item is created in admin
   const handleItemCreated = () => {
-    showToast('New item published to catalog successfully!');
     loadItems();
-    setCurrentView('admin-dashboard');
+    setCurrentView('admin');
   };
 
-  const isAdminView = currentView.startsWith('admin');
+  const isAdmin = currentView === 'admin' || currentView === 'add-item';
 
   return (
-    <div className={`app-root ${isAdminView ? 'view-admin' : 'view-customer'}`}>
-      {/* Toast Notification Banner */}
-      {toastMessage && (
-        <div className="toast-notification">
-          <span className="toast-icon">✓</span>
-          <span>{toastMessage}</span>
-          <button
-            type="button"
-            className="toast-close"
-            onClick={() => setToastMessage('')}
-          >
-            ✕
-          </button>
-        </div>
-      )}
-
-      {/* Customer Header Navigation */}
-      {!isAdminView && (
+    <div className="app">
+      {/* Customer Header */}
+      {!isAdmin && (
         <Navbar
-          activeTab={currentView === 'customer-catalog' ? 'items' : 'submit'}
+          activeTab={currentView === 'catalog' ? 'items' : 'submit'}
           onSelectTab={(tab) => {
             if (tab === 'items') {
-              setCurrentView('customer-catalog');
+              setCurrentView('catalog');
             } else {
               setSelectedItem(null);
-              setCurrentView('customer-form');
+              setCurrentView('feedback');
             }
           }}
-          onGoAdmin={() => setCurrentView('admin-dashboard')}
+          onGoAdmin={() => setCurrentView('admin')}
         />
       )}
 
-      {/* Main Container Layout */}
-      <div className={`app-body-layout ${isAdminView ? 'admin-layout' : 'customer-layout'}`}>
-        {/* Admin Sidebar Navigation */}
-        {isAdminView && (
+      {/* Main Body */}
+      <div className={isAdmin ? 'admin-layout' : 'customer-layout'}>
+        {/* Admin Sidebar */}
+        {isAdmin && (
           <Sidebar
-            activePage={currentView === 'admin-dashboard' ? 'dashboard' : 'addItem'}
+            activePage={currentView === 'admin' ? 'dashboard' : 'addItem'}
             onNavigate={(page) => {
-              if (page === 'dashboard') setCurrentView('admin-dashboard');
-              if (page === 'addItem') setCurrentView('admin-add-item');
+              if (page === 'dashboard') setCurrentView('admin');
+              if (page === 'addItem') setCurrentView('add-item');
             }}
-            onGoCustomer={() => setCurrentView('customer-catalog')}
+            onGoCustomer={() => setCurrentView('catalog')}
           />
         )}
 
-        {/* Page Content View */}
-        <main className={`page-main-content ${isAdminView ? 'admin-main-viewport' : 'customer-main-viewport'}`}>
-          {currentView === 'customer-catalog' && (
+        {/* Page Views */}
+        <main className="main-content">
+          {currentView === 'catalog' && (
             <CustomerCatalogPage
               items={items}
-              loading={itemsLoading}
+              loading={loadingItems}
               onSelectFeedbackItem={handleSelectFeedbackItem}
               onGeneralFeedback={handleGeneralFeedback}
-              onGoAdmin={() => setCurrentView('admin-dashboard')}
+              onGoAdmin={() => setCurrentView('admin')}
             />
           )}
 
-          {currentView === 'customer-form' && (
+          {currentView === 'feedback' && (
             <FeedbackFormPage
               selectedItem={selectedItem}
-              items={items}
-              onBackToCatalog={() => setCurrentView('customer-catalog')}
-              onGoAdmin={() => setCurrentView('admin-dashboard')}
+              onBackToCatalog={() => setCurrentView('catalog')}
               onFeedbackSubmitted={handleFeedbackSubmitted}
             />
           )}
 
-          {currentView === 'admin-dashboard' && (
+          {currentView === 'admin' && (
             <AdminDashboardPage
-              items={items}
-              onGoAddItem={() => setCurrentView('admin-add-item')}
+              onGoAddItem={() => setCurrentView('add-item')}
             />
           )}
 
-          {currentView === 'admin-add-item' && (
+          {currentView === 'add-item' && (
             <AdminAddItemPage
               onItemCreated={handleItemCreated}
-              onCancel={() => setCurrentView('admin-dashboard')}
+              onCancel={() => setCurrentView('admin')}
             />
           )}
         </main>

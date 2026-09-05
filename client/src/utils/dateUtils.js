@@ -1,39 +1,28 @@
-﻿/**
- * Formats an ISO date string into a human-readable date
- * @param {string|Date} dateInput - The date to format
- * @returns {string} Formatted date like "Nov 24, 2026"
- */
-export const formatDate = (dateInput) => {
-  if (!dateInput) return '';
-  const date = new Date(dateInput);
+﻿// Helper function to format date strings
+export const formatDate = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
   if (isNaN(date.getTime())) return '';
-  return date.toLocaleDateString('en-US', {
-    month: 'short',
+  return date.toLocaleDateString('en-GB', {
     day: 'numeric',
+    month: 'short',
     year: 'numeric'
   });
 };
 
-/**
- * Calculates a concise relative time string for a given date
- * @param {string|Date} dateInput - The past date to compare against now
- * @returns {string} Relative string like "12m ago", "2h ago", "3d ago"
- */
-export const formatRelativeTime = (dateInput) => {
-  if (!dateInput) return '';
-  const date = new Date(dateInput);
-  if (isNaN(date.getTime())) return '';
-
+// Returns a simple time-ago or date
+export const formatRelativeTime = (dateString) => {
+  if (!dateString) return '';
+  const date = new Date(dateString);
   const now = new Date();
-  const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+  const diffMinutes = Math.floor((now - date) / (1000 * 60));
 
-  if (diffInSeconds < 60) return 'Just now';
-  const diffInMinutes = Math.floor(diffInSeconds / 60);
-  if (diffInMinutes < 60) return `${diffInMinutes}m ago`;
-  const diffInHours = Math.floor(diffInMinutes / 60);
-  if (diffInHours < 24) return `${diffInHours}h ago`;
-  const diffInDays = Math.floor(diffInHours / 24);
-  if (diffInDays < 30) return `${diffInDays}d ago`;
+  if (diffMinutes < 1) return 'Just now';
+  if (diffMinutes < 60) return `${diffMinutes}m ago`;
+  const diffHours = Math.floor(diffMinutes / 60);
+  if (diffHours < 24) return `${diffHours}h ago`;
+  const diffDays = Math.floor(diffHours / 24);
+  if (diffDays < 7) return `${diffDays}d ago`;
 
-  return formatDate(date);
+  return formatDate(dateString);
 };

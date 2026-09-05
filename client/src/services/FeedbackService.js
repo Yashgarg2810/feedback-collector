@@ -1,127 +1,92 @@
-﻿const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '';
+﻿// FeedbackService.js - Handles all API calls between React and Express backend
+
+const API_URL = '/api';
 
 /**
- * Service to handle all Feedback and Catalog Item API requests
+ * Fetch all feedback entries with optional filters
+ * @param {Object} filters - { keyword, date, rating }
+ * @returns {Promise<Array>} List of feedback objects
  */
-const FeedbackService = {
-  /**
-   * Submits a new feedback entry to the server
-   * @param {Object} formData - Feedback payload containing name, email, message, rating, itemName, itemId
-   * @returns {Promise<Object>} Created feedback object
-   */
-  async submitFeedback(formData) {
-    const response = await fetch(`${API_BASE_URL}/api/feedback`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    });
+export const getFeedback = async (filters = {}) => {
+  const query = new URLSearchParams();
+  if (filters.keyword) query.set('keyword', filters.keyword);
+  if (filters.date) query.set('date', filters.date);
+  if (filters.rating) query.set('rating', filters.rating);
 
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to submit feedback');
-    }
-    return data;
-  },
-
-  /**
-   * Retrieves feedback list with optional filters (keyword, date, rating, sentiment, item)
-   * @param {Object} [params={}] - Filter criteria
-   * @returns {Promise<Array>} List of feedback entries
-   */
-  async getFeedback(params = {}) {
-    const query = new URLSearchParams();
-    if (params.keyword) query.set('keyword', params.keyword);
-    if (params.date) query.set('date', params.date);
-    if (params.rating) query.set('rating', params.rating);
-    if (params.sentiment) query.set('sentiment', params.sentiment);
-    if (params.item) query.set('item', params.item);
-
-    const queryString = query.toString() ? `?${query.toString()}` : '';
-    const response = await fetch(`${API_BASE_URL}/api/feedback${queryString}`);
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to fetch feedback entries');
-    }
-    return data;
-  },
-
-  /**
-   * Deletes a feedback entry by ID
-   * @param {string} id - The feedback document ID to delete
-   * @returns {Promise<Object>} Success message
-   */
-  async deleteFeedback(id) {
-    const response = await fetch(`${API_BASE_URL}/api/feedback/${id}`, {
-      method: 'DELETE'
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to delete feedback');
-    }
-    return data;
-  },
-
-  /**
-   * Retrieves summary analytics for admin moderation
-   * @returns {Promise<Object>} Statistics object
-   */
-  async getFeedbackStats() {
-    const response = await fetch(`${API_BASE_URL}/api/feedback/stats`);
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to fetch feedback statistics');
-    }
-    return data;
-  },
-
-  /**
-   * Retrieves product items for catalog display
-   * @returns {Promise<Array>} List of catalog items
-   */
-  async getItems() {
-    const response = await fetch(`${API_BASE_URL}/api/items`);
-    const data = await response.json();
-
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to fetch catalog items');
-    }
-    return data;
-  },
-
-  /**
-   * Creates a new item in the catalog
-   * @param {Object} itemData - Item attributes (name, category, description, code, image)
-   * @returns {Promise<Object>} Created item
-   */
-  async createItem(itemData) {
-    const response = await fetch(`${API_BASE_URL}/api/items`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(itemData)
-    });
-
-    const data = await response.json();
-    if (!response.ok) {
-      throw new Error(data.message || 'Failed to create item');
-    }
-    return data;
-  }
+  const url = `${API_URL}/feedback${query.toString() ? '?' + query.toString() : ''}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch feedback');
+  return await res.json();
 };
 
-export const {
-  submitFeedback,
+/**
+ * Submits new feedback to the server
+ * @param {Object} formData - { name, email, message, rating, itemName }
+ * @returns {Promise<Object>} Created feedback
+ */
+export const submitFeedback = async (formData) => {
+  const res = await fetch(`${API_URL}/feedback`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(formData)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Failed to submit feedback');
+  return data;
+};
+
+/**
+ * Deletes a feedback by ID
+ * @param {string} id - Feedback ID
+ */
+export const deleteFeedback = async (id) => {
+  const res = await fetch(`${API_URL}/feedback/${id}`, {
+    method: 'DELETE'
+  });
+  if (!res.ok) throw new Error('Failed to delete feedback');
+  return await res.json();
+};
+
+/**
+ * Fetches dashboard stats (total count, average rating)
+ */
+export const getFeedbackStats = async () => {
+  const res = await fetch(`${API_URL}/feedback/stats`);
+  if (!res.ok) throw new Error('Failed to fetch stats');
+  return await res.json();
+};
+
+/**
+ * Fetches product items for catalog
+ */
+export const getItems = async () => {
+  const res = await fetch(`${API_URL}/items`);
+  if (!res.ok) throw new Error('Failed to fetch items');
+  return await res.json();
+};
+
+/**
+ * Creates a new catalog item
+ * @param {Object} itemData - { name, category, description, code }
+ */
+export const createItem = async (itemData) => {
+  const res = await fetch(`${API_URL}/items`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(itemData)
+  });
+  const data = await res.json();
+  if (!res.ok) throw new Error(data.message || 'Failed to create item');
+  return data;
+};
+
+const FeedbackService = {
   getFeedback,
+  submitFeedback,
   deleteFeedback,
   getFeedbackStats,
   getItems,
   createItem
-} = FeedbackService;
+};
 
 export default FeedbackService;
