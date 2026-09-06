@@ -1,6 +1,6 @@
 // FeedbackService.js - Handles all API calls between React and Express backend
 
-const API_URL = '/api';
+const API_URL = import.meta.env.VITE_API_URL || '/api';
 
 /**
  * Fetch all feedback entries with optional filters
