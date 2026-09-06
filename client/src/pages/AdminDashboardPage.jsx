@@ -1,10 +1,10 @@
-﻿import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import FeedbackList from '../components/FeedbackList';
 import { getFeedback, deleteFeedback, getFeedbackStats } from '../services/FeedbackService';
 
 /**
  * Admin Dashboard Page
- * Triage and manage customer feedback with search and date filters
+ * manage customer feedback with search and date filters
  */
 export default function AdminDashboardPage({ onGoAddItem }) {
   const [feedbacks, setFeedbacks] = useState([]);
@@ -28,7 +28,7 @@ export default function AdminDashboardPage({ onGoAddItem }) {
         date: selectedDate,
         rating: selectedRating
       });
-      setFeedbacks(data);
+      setFeedbacks(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching feedback:', err);
     } finally {

@@ -7,6 +7,7 @@ import bagImg from '../assets/bag.avif';
 import chairImg from '../assets/chair.jfif';
 import choclateImg from '../assets/choclate.webp';
 import mouseImg from '../assets/mouse.jpg';
+import sofaImg from '../assets/sofa.avif';
 
 // Map code to local image imported from assets
 const imageMap = {
@@ -22,6 +23,7 @@ const imageMap = {
   'VALENTINE': choclateImg,
   'WM-10': mouseImg,
   'WM-100': mouseImg,
+  'ITEM-276': sofaImg
 };
 
 /**

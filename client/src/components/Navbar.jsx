@@ -3,6 +3,7 @@
 /**
  * Navigation bar for customer portal
  */
+
 export default function Navbar({ activeTab, onSelectTab, onGoAdmin }) {
   return (
     <header className="navbar">

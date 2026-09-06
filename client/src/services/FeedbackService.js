@@ -1,4 +1,4 @@
-﻿// FeedbackService.js - Handles all API calls between React and Express backend
+// FeedbackService.js - Handles all API calls between React and Express backend
 
 const API_URL = '/api';
 
@@ -17,7 +17,8 @@ export const getFeedback = async (filters = {}) => {
     if (!res.ok) {
       return [];
     }
-    return await res.json();
+    const data = await res.json();
+    return Array.isArray(data) ? data : [];
   } catch (err) {
     console.log('Backend offline or unreachable:', err.message);
     return [];

@@ -2,9 +2,11 @@
 import { submitFeedback } from '../services/FeedbackService';
 
 /**
- * Reusable FeedbackForm component
+ * FeedbackForm component
  * Collects name, email, rating, and message from user
  */
+
+
 export default function FeedbackForm({ selectedItem, onFeedbackSubmitted, onCancel }) {
   const [formData, setFormData] = useState({
     name: '',
@@ -24,16 +26,11 @@ export default function FeedbackForm({ selectedItem, onFeedbackSubmitted, onCanc
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  /**
-   * Submits the feedback form data to the server
-   * @param {Object} e - Event object
-   */
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
     setSuccessMessage('');
 
-    // Basic form validations
     if (!formData.name.trim()) {
       setErrorMessage('Please enter your name.');
       return;
@@ -56,6 +53,7 @@ export default function FeedbackForm({ selectedItem, onFeedbackSubmitted, onCanc
       setSuccessMessage('Thank you! Your feedback has been submitted successfully.');
 
       // Reset form after submission
+
       setFormData({
         name: '',
         email: '',
@@ -104,6 +102,8 @@ export default function FeedbackForm({ selectedItem, onFeedbackSubmitted, onCanc
           </div>
         </div>
 
+
+
         {/* Name Field */}
         <div className="form-group">
           <label htmlFor="name">Your Name *</label>
@@ -112,11 +112,13 @@ export default function FeedbackForm({ selectedItem, onFeedbackSubmitted, onCanc
             type="text"
             name="name"
             className="form-control"
-            placeholder="e.g. Rahul Sharma"
+            placeholder="e.g. Yash Garg"
             value={formData.name}
             onChange={handleChange}
           />
         </div>
+
+
 
         {/* Email Field */}
         <div className="form-group">
@@ -126,11 +128,13 @@ export default function FeedbackForm({ selectedItem, onFeedbackSubmitted, onCanc
             type="email"
             name="email"
             className="form-control"
-            placeholder="e.g. rahul@example.com"
+            placeholder="e.g. yash@example.com"
             value={formData.email}
             onChange={handleChange}
           />
         </div>
+
+
 
         {/* Message Field */}
         <div className="form-group">
@@ -149,6 +153,8 @@ export default function FeedbackForm({ selectedItem, onFeedbackSubmitted, onCanc
             maxLength={500}
           />
         </div>
+
+
 
         {/* Action Buttons */}
         <div className="form-actions">

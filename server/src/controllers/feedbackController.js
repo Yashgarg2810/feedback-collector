@@ -3,35 +3,7 @@ const Feedback = require('../models/Feedback');
 const Item = require('../models/Item');
 
 // In-memory store fallback in case MongoDB Atlas IP is temporarily blocked or disconnected
-let memoryFeedbacks = [
-  {
-    _id: 'mem_1',
-    name: 'Sarah Jenkins',
-    email: 'sarah.j@acme.corp',
-    message: 'Amazing throughput on analytics exports and effortless dashboard navigation.',
-    rating: 5,
-    itemName: 'Wireless Noise-Canceling Headphones',
-    createdAt: new Date(Date.now() - 3600000).toISOString()
-  },
-  {
-    _id: 'mem_2',
-    name: 'Yash Garg',
-    email: 'yash@email.com',
-    message: 'Simple onboarding, docs could use more API examples for webhook integration.',
-    rating: 4,
-    itemName: 'Ergonomic Office Chair',
-    createdAt: new Date(Date.now() - 7200000).toISOString()
-  },
-  {
-    _id: 'mem_3',
-    name: 'Michael Chen',
-    email: 'm.chen@enterprise.io',
-    message: 'Intermittent token timeout during peak load hours. Otherwise very stable.',
-    rating: 3,
-    itemName: 'Stainless Steel Water Bottle',
-    createdAt: new Date(Date.now() - 14400000).toISOString()
-  }
-];
+let memoryFeedbacks = [];
 
 /**
  * Creates a new feedback entry
@@ -91,6 +63,7 @@ const createFeedback = async (req, res) => {
 /**
  * Retrieves feedback entries with optional filtering
  */
+
 const getFeedback = async (req, res) => {
   try {
     const { keyword, date, rating, sentiment } = req.query;

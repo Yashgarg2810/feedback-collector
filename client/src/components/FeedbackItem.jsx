@@ -2,9 +2,7 @@
 import { formatDate } from '../utils/dateUtils';
 import { getSentiment } from '../utils/sentimentUtils';
 
-/**
- * Renders a single feedback entry row in the admin table
- */
+
 export default function FeedbackItem({ feedback, onDelete }) {
   const sentiment = getSentiment(feedback.rating);
 

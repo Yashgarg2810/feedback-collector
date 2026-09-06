@@ -3,6 +3,7 @@
 /**
  * Sidebar component for Admin Dashboard
  */
+
 export default function Sidebar({ activePage, onNavigate, onGoCustomer }) {
   return (
     <aside className="sidebar">

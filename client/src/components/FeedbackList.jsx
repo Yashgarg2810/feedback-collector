@@ -1,11 +1,11 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import FeedbackItem from './FeedbackItem';
 import ModalComponent from './ModalComponent';
 
 /**
- * FeedbackList Component
  * Displays table of feedback entries with keyword, date, and rating filters
  */
+
 export default function FeedbackList({
   feedbacks = [],
   loading = false,
