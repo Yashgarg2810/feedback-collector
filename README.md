@@ -22,3 +22,8 @@ Backend Folder Structure -
 
 command to run Backend -
     node server.js
+
+
+
+<img width="1846" height="929" alt="image" src="https://github.com/user-attachments/assets/91e83c22-ed46-4cc6-849e-96d504efc221" />
+
