@@ -1,4 +1,4 @@
-﻿const express = require('express');
+const express = require('express');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const connectDB = require('./src/config/db');
@@ -15,6 +15,19 @@ app.use(express.json()); // parse application/json
 
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/items', itemRoutes);
+
+// Root route
+app.get('/', (req, res) => {
+  res.json({
+    message: 'FeedbackHub Backend API is running successfully!',
+    status: 'active',
+    endpoints: {
+      feedback: '/api/feedback',
+      items: '/api/items',
+      health: '/api/health'
+    }
+  });
+});
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
