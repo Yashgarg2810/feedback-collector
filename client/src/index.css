@@ -176,9 +176,8 @@ body {
   color: #991b1b;
 }
 
-/* ==========================================================
-   Navbar (Customer Header)
-   ========================================================== */
+
+/* Navbar (Customer Header) */
 .navbar {
   background-color: #ffffff;
   border-bottom: 1px solid #e2e8f0;
@@ -228,9 +227,7 @@ body {
   margin-left: 8px;
 }
 
-/* ==========================================================
-   Customer Catalog Page
-   ========================================================== */
+/* Customer Catalog Page*/
 .catalog-header {
   display: flex;
   justify-content: space-between;
@@ -389,9 +386,7 @@ body {
   gap: 16px;
 }
 
-/* ==========================================================
-   Feedback Form
-   ========================================================== */
+/*  Feedback Form */
 .form-card {
   max-width: 650px;
   margin: 0 auto 30px;
@@ -432,9 +427,7 @@ body {
   margin-bottom: 16px;
 }
 
-/* ==========================================================
-   Admin Workspace & Sidebar
-   ========================================================== */
+/*  Admin Workspace & Sidebar */
 .admin-layout {
   display: flex;
   min-height: calc(100vh - 60px);
@@ -590,9 +583,7 @@ body {
   align-self: flex-end;
 }
 
-/* ==========================================================
-   Feedback Table
-   ========================================================== */
+/*  Feedback Table */
 .table-responsive {
   background: #ffffff;
   border: 1px solid #e2e8f0;
@@ -740,9 +731,7 @@ body {
   font-weight: 600;
 }
 
-/* ==========================================================
-   Responsive Styles
-   ========================================================== */
+/*  Responsive Styles */
 @media (max-width: 768px) {
   .admin-layout {
     flex-direction: column;
